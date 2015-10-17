@@ -18,6 +18,9 @@
   "homepage": "https://github.com/smockle/motherlode#readme",
   "devDependencies": {
     "babel": "^5.8.23",
+    "codeclimate-test-reporter": "^0.1.1",
+    "coveralls": "^2.11.4",
+    "istanbul": "^0.4.0",
     "mocha": "^2.3.3"
   }
 }

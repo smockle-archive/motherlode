@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+- 4.2.1
+notifications:
+  email:
+    on_success: change
+    on_failure: always
+cache:
+  directories:
+  - node_modules
+before_install:
+- npm install -g npm@3.3.6
+after_script:
+- npm run coverage
+- cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+- "./node_modules/.bin/codeclimate-test-reporter < ./coverage/lcov.info"
+env:
+  global:
+  - secure: FvOD76S5rUsOEzp8TauyH6XKZHFkeyFnwQ7hDsifSwFIBvnn61Syng+PztEVfThcF3v4fY/1DRoZeIUtkMeYKhaUc0mWQ22pn7DSYkeIkpmSarVKlhegC+80k45x3K2i8FfxrJU3t4FqW4jhqdlC4cyKS8pnhz3qCLGi03QjLQK6fcTz7PZqbGLpD7c5UmOaKsds5Sgx4EWXl/FEUjRS0/BndH1m9ZktuDWq6kQP97OuxdnajDPkNuS1kOPj3+jcqg5EtsM6/mPyHWuL3Zs6qNPxa41sUU/FgTYIwIfgZagNDUJpg8gvhcUouVhSqjOoo+1UxrsxbtnYl25iOaWnDiZ6vprtKeb4HsNuNy4DCCpyjqkCmSx8H2bV7kFkCrbG7i+L52rhtCEENMQzfx8TWsJjbLp9ljz973Of4R1IT3vGWd95H4HrjyULvvqGlxawYeqq863DN/dmuzqfE8ZfVJ6U4lBbBaRrVmHtYieRHSGP3cdaBXNkojjiBYFKoPN4ogHer6UGbFqR7hugwsU+CkYtIKF51mDiKitFINmvmGRNQb2YKMZS+YkXGdip7cite35sCVCUdg+y6E9LA267eSuU+bX4XcEn4qKH2uG6w3Lx/udCh3MYaVmHzOTtgYATjUXEBIA9dkeHyYvwLmZhMfBY+RvmifnBuRsI+k1UE+Y=
+  - secure: U41XcSmQ5aR136QSPRi8oHn9Fm5tUegYMUkQrhS8A121Kd0a3nL2GAi8580tRgDHGezCKvMB/zzYDqj98Cre2vBQkEVuj9v8Gac3foCLefuyzmJxZ5Law0vsr+26tNUizl6pLmwWY3YJxFjo43m+dG6VMt4Qhf0tNuzHeOhe4hbwP6HF6SOg0LOlWkuGzofw3U3O6MWnzzoXd5MSEl3+sVy3RLaxQPF8ud47o9MSfGTKKSth6ZjjKxh4kpW+7JGFcrMSLaPLKwdbxv6ypuYI9RfJXh1NqExNtER4eATrC35HoaSolWbt3eetUnGyUs/M0upv/gQpkbhDZx/pGCVxvzOqabXPlX+wU2Treyhr+rgiUWyVLir79oByF7UB9Axw3548u6wyDvJtEInMGvmPLlHeoVnXdS0gDesr2z5NZ4h2u4bwXxkRShLhzc3+NEBHAxtH96lMoNO/6dE6PKhe0ETKwzAiNiexXBBpCktd0NhEuCvX8EcvkHhfW0lL1SbrXaWxE4NE160EHuZakzKrEDdoadl565tuVx/2q5T9z30Wp9LQhW5mnYOsxbBQFlorfDt0RSUqtLEFhNPhnKy+/A75kDHuAmMv/QtIRZfveXXwDWtR0eDnXoGZ0Fh+AjoduYvOmcQ4qh8Vhrkew3zxSgdYq2ppxiAF3MnOPUN7XiY=
