@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/smockle/motherlode/issues"
   },
-  "homepage": "https://github.com/smockle/motherlode#readme"
+  "homepage": "https://github.com/smockle/motherlode#readme",
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "mocha": "^2.3.3"
+  }
 }
