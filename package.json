@@ -4,7 +4,10 @@
   "description": "Ideal asset allocation tool.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel/register --recursive"
+    "start": "babel-node index.js",
+    "test": "mocha --compilers js:babel/register --recursive",
+    "coverage": "$(npm bin)/istanbul cover $(npm bin)/_mocha -- --compilers js:babel/register --recursive",
+    "shrinkwrap": "rm -Rf node_modules && rm -f npm-shrinkwrap.json && npm i && npm shrinkwrap --dev"
   },
   "repository": {
     "type": "git",
