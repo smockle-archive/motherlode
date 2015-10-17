@@ -16,4 +16,6 @@
 // Display current number of shares, recommended purchases of shares, and what the number of shares after purchase would be
   // TODO: Save symbols, [new] current number of shares, ideal allocation to file
 
-export default function() {};
+export default function Motherlode(unallocated) {
+  return Object.assign(unallocated);
+};

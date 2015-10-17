@@ -1,6 +1,7 @@
 import 'mocha';
 import {assert} from 'chai';
 import Asset from '../src/asset';
+import Percent from '../src/percent';
 import Motherlode from '../src/motherlode';
 
 describe('Motherlode', () => {
@@ -8,7 +9,7 @@ describe('Motherlode', () => {
     const unallocated = [{
       asset: Asset('VTI', 200),
       quantity: 1,
-      ideal: '100%'
+      ideal: Percent(100)
     }];
     const allocated = Motherlode(unallocated);
     assert.deepEqual(allocated, unallocated);
