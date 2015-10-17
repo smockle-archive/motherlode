@@ -17,5 +17,7 @@
   // TODO: Save symbols, [new] current number of shares, ideal allocation to file
 
 export default function Motherlode(unallocated) {
+  if (!(unallocated instanceof Array)) throw new TypeError('Expected input to be an Array.');
+  if (unallocated.length === 0) throw new Error('Input array cannot be empty.');
   return Object.assign(unallocated);
 };
