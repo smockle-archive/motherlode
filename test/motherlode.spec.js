@@ -71,7 +71,7 @@ describe('Motherlode', () => {
       let motherlode = Motherlode(assets);
       assert.throws(motherlode.load.bind(motherlode, 'SPY'), TypeError);
     });
-    it('loads additional funds', () => {
+    it('loads additional funds without cash surplus', () => {
       const assets = [{
         asset: Asset('SPY', $(200)),
         quantity: 1,
@@ -79,8 +79,50 @@ describe('Motherlode', () => {
       }];
       let motherlode = Motherlode(assets);
       motherlode.load($(200));
-      assert.strictEqual(motherlode.assets[0].quantity, 2);
+      // Check portfolio
       assert.deepEqual(motherlode.net, $(400));
+      assert.strictEqual(motherlode.assets.length, 1);
+      // Check SPY
+      const spy = motherlode.assets.find((a) => a.asset.symbol === 'SPY');
+      assert.strictEqual(spy.quantity, 2);
+    });
+    it('loads additional funds with cash surplus', () => {
+      const assets = [{
+        asset: Asset('SPY', $(200)),
+        quantity: 1,
+        ideal: Percent(100)
+      }];
+      let motherlode = Motherlode(assets);
+      motherlode.load($(250));
+      // Check portfolio
+      assert.deepEqual(motherlode.net, $(450));
+      assert.strictEqual(motherlode.assets.length, 2);
+      // Check SPY
+      const spy = motherlode.assets.find((a) => a.asset.symbol === 'SPY');
+      assert.strictEqual(spy.quantity, 2);
+      // Check CASH
+      const cash = motherlode.assets.find((a) => a.asset.symbol === '_CASH');
+      assert.deepEqual(cash.asset.price, $(1));
+      assert.strictEqual(cash.quantity, 50);
+    });
+    it('loads cash surplus', () => {
+      const assets = [{
+        asset: Asset('SPY', $(200)),
+        quantity: 1,
+        ideal: Percent(100)
+      }];
+      let motherlode = Motherlode(assets);
+      motherlode.load($(50));
+      // Check portfolio
+      assert.deepEqual(motherlode.net, $(250));
+      assert.strictEqual(motherlode.assets.length, 2);
+      // Check SPY
+      const spy = motherlode.assets.find((a) => a.asset.symbol === 'SPY');
+      assert.strictEqual(spy.quantity, 1);
+      // Check CASH
+      const cash = motherlode.assets.find((a) => a.asset.symbol === '_CASH');
+      assert.deepEqual(cash.asset.price, $(1));
+      assert.strictEqual(cash.quantity, 50);
     });
   });
 });

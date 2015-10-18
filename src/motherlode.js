@@ -62,11 +62,11 @@ Motherlode.prototype.load = function(amount) {
   if (!(amount instanceof $))
     throw new TypeError('Load amount must be in USD.');
 
-  const unallocated = Object.assign(this.assets);
   this.net = $(this.net + amount);
 
-  // TODO: Break loop if load amount is less than the least-expensive asset price.
-  while(amount > 0) {
+  const unallocated = Object.assign(this.assets);
+  const minPrice = this.assets.reduce((min, a) => Math.min(min, a.asset.price), Infinity);
+  while(amount >= minPrice) {
     // Move asset with largest [negative] delta to the top.
     this.assets.sort((a, b) => a.delta - b.delta);
     // TODO: Break loop if remaining load amount is less than the underallocated asset price.
@@ -74,8 +74,13 @@ Motherlode.prototype.load = function(amount) {
     amount -= this.assets[0].asset.price;
   }
 
-  // TODO: Add cash value asset if amount > 0
-  console.log(unallocated, this.assets);
+  // Store uninvestable load amount as _CASH.
+  if (amount > 0)
+    this.assets.push({
+      asset: Asset('_CASH', $(1)),
+      quantity: amount.valueOf(),
+      ideal: Percent(0)
+    });
 };
 
 export default Motherlode;
