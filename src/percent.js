@@ -1,7 +1,8 @@
 function Percent(number) {
   let percent = Object.create(Percent.prototype);
   // Validate parameters
-  if (typeof number !== 'number' && !(number instanceof Number)) throw new TypeError('Expected input to be a number.');
+  if (typeof number !== 'number' && !(number instanceof Number))
+    throw new TypeError('Expected input to be a number.');
   // Set properties
   percent.__value = number;
   return percent;
