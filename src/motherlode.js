@@ -20,15 +20,17 @@ import Asset from './asset';
 import Percent from './percent';
 import USD from './usd'; const $ = USD;
 
-export default function Motherlode(unallocated) {
-  if (!(unallocated instanceof Array))
+function Motherlode(assets) {
+  let motherlode = Object.create(Motherlode.prototype);
+
+  if (!(assets instanceof Array))
     throw new TypeError('Expected input to be an array.');
-  if (unallocated.length === 0)
+  if (assets.length === 0)
     throw new Error('Input array cannot be empty.');
 
   // Calculate net and validate each element in input array.
-  let net = $(0);
-  unallocated.forEach((u) => {
+  motherlode.net = $(0);
+  assets.forEach((u) => {
     if (!u.hasOwnProperty('asset'))
       throw new TypeError('Input array contains an element without an asset key.');
     if (!u.hasOwnProperty('quantity'))
@@ -43,14 +45,21 @@ export default function Motherlode(unallocated) {
       throw new TypeError('Input array contains an element with a bad ideal value.');
     if (u.quantity < 0)
       throw new TypeError('Input array contains an element with a negative quantity.');
-    net += $(u.asset.price * u.quantity);
+    motherlode.net += $(u.asset.price * u.quantity);
   });
 
   // Set allocation and delta on each element in input array.
-  unallocated.forEach((u) => {
-    u.allocation = Percent.fromDecimal(u.asset.price * u.quantity / net);
+  assets.forEach((u) => {
+    u.allocation = Percent.fromDecimal(u.asset.price * u.quantity / motherlode.net);
     u.delta = Percent.fromDecimal(u.allocation - u.ideal);
   });
 
-  return Object.assign(unallocated);
+  motherlode.assets = Object.assign(assets);
+  return motherlode;
 };
+
+Motherlode.prototype.load = function(amount) {
+
+};
+
+export default Motherlode;

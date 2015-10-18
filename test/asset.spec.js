@@ -18,7 +18,7 @@ describe('Asset', () => {
       assert.throws(Asset.bind(Asset, 'SPY', $(0)), TypeError);
       assert.throws(Asset.bind(Asset, 'SPY', $(-1)), TypeError);
     });
-    it('creates an asset when all inputs are valid', () => {
+    it('creates an Asset when all inputs are valid', () => {
       const asset = Asset('SPY', $(200));
       assert.strictEqual(asset.symbol, 'SPY');
       assert.typeOf(asset.symbol, 'string');
