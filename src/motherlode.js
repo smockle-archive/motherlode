@@ -68,8 +68,14 @@ Motherlode.prototype.load = function(amount) {
   const minPrice = this.assets.reduce((min, a) => Math.min(min, a.asset.price), Infinity);
   while(amount >= minPrice) {
     // Move asset with largest [negative] delta to the top.
-    this.assets.sort((a, b) => a.delta - b.delta);
-    // TODO: Break loop if remaining load amount is less than the underallocated asset price.
+    // If multiple assets have the same delta, sort by price.
+    this.assets.sort((a, b) => {
+      return a.delta - b.delta === 0 ?
+      a.asset.price - b.asset.price :
+      a.delta - b.delta;
+    });
+    // Break if underallocated asset price is greater than remaining load amount.
+    if (this.assets[0].asset.price > amount) break;
     this.assets[0].quantity++;
     amount -= this.assets[0].asset.price;
   }

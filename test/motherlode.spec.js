@@ -124,5 +124,31 @@ describe('Motherlode', () => {
       assert.deepEqual(cash.asset.price, $(1));
       assert.strictEqual(cash.quantity, 50);
     });
+    it('loads cash surplus if load amount is greater than the price of the cheapest asset but less than the price of the most underallocated asset', () => {
+      const assets = [{
+        asset: Asset('SPY', $(200)),
+        quantity: 1,
+        ideal: Percent(50)
+      }, {
+        asset: Asset('AGG', $(50)),
+        quantity: 8,
+        ideal: Percent(50)
+      }];
+      let motherlode = Motherlode(assets);
+      motherlode.load($(100));
+      // Check portfolio
+      assert.deepEqual(motherlode.net, $(700));
+      assert.strictEqual(motherlode.assets.length, 3);
+      // Check SPY
+      const spy = motherlode.assets.find((a) => a.asset.symbol === 'SPY');
+      assert.strictEqual(spy.quantity, 1);
+      // Check AGG
+      const agg = motherlode.assets.find((a) => a.asset.symbol === 'AGG');
+      assert.strictEqual(agg.quantity, 8);
+      // Check CASH
+      const cash = motherlode.assets.find((a) => a.asset.symbol === '_CASH');
+      assert.deepEqual(cash.asset.price, $(1));
+      assert.strictEqual(cash.quantity, 100);
+    });
   });
 });
