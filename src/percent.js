@@ -14,7 +14,7 @@ Percent.fromDecimal = function(number) {
   return Percent(100 * number);
 };
 Percent.prototype.inspect = function() {
-  return `${this.__value}%`;
+  return `${Math.round(this.__value * Math.pow(10, 2)) / Math.pow(10, 2)}%`;
 }
 Percent.prototype.valueOf = function() {
   return this.__value/100;

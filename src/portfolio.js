@@ -43,7 +43,9 @@ function Portfolio(assets) {
 
   // Set allocation and delta on each element in input array.
   assets.forEach((u) => {
-    u.allocation = Percent.fromDecimal(u.asset.price * u.quantity / portfolio.net);
+    u.allocation = portfolio.net !== 0 ?
+                   Percent.fromDecimal(u.asset.price * u.quantity / portfolio.net) :
+                   Percent(0);
     u.delta = Percent.fromDecimal(u.allocation - u.ideal);
   });
 
@@ -80,13 +82,20 @@ Portfolio.prototype.load = function(amount) {
     if (this.assets[0].asset.price > amount) break;
     this.assets[0].quantity++;
     amount -= this.assets[0].asset.price;
+    // Set allocation and delta on each element in input array.
+    this.assets.forEach((u) => {
+      u.allocation = this.net !== 0 ?
+                     Percent.fromDecimal(u.asset.price * u.quantity / this.net) :
+                     Percent(0);
+      u.delta = Percent.fromDecimal(u.allocation - u.ideal);
+    });
   }
 
   // Store uninvestable load amount as _CASH.
   if (amount > 0)
     this.assets.push({
       asset: Asset('_CASH', $(1)),
-      quantity: amount.valueOf(),
+      quantity: Math.round(amount.valueOf() * Math.pow(10, 2)) / Math.pow(10, 2),
       ideal: Percent(0)
     });
 };
