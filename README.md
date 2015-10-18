@@ -8,3 +8,7 @@
 # motherlode
 
 Ideal asset allocation tool.
+
+# Disclaimer
+
+This tool and any information it provides is for information purposes only. It is not intended to be investment advice. Seek a duly licensed professional for investment advice.

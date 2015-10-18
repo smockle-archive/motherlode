@@ -47,6 +47,16 @@ describe('Portfolio', () => {
       }];
       assert.throws(Portfolio.bind(Portfolio, [negative]), TypeError);
     });
+    it('throws if ideal allocations don’t sum to 100%', () => {
+      const under = [{
+        asset: Asset('ZVZZT', $(200)),
+        quantity: 1,
+        ideal: Percent(50)
+      }];
+      let over = Object.assign(under); over.ideal = Percent(150);
+      assert.throws(Portfolio.bind(Portfolio, [under]), TypeError);
+      assert.throws(Portfolio.bind(Portfolio, [over]), TypeError);
+    });
     it('creates a Portfolio when all inputs are valid', () => {
       const assets = [{
         asset: Asset('ZVZZT', $(200)),

@@ -38,6 +38,9 @@ function Portfolio(assets) {
     portfolio.net += $(u.asset.price * u.quantity);
   });
 
+  if (assets.reduce((pct, a) => pct + a.ideal, 0) !== Percent(100).valueOf())
+    throw new TypeError('Ideal allocations must sum to 100%.')
+
   // Set allocation and delta on each element in input array.
   assets.forEach((u) => {
     u.allocation = Percent.fromDecimal(u.asset.price * u.quantity / portfolio.net);
@@ -64,7 +67,6 @@ Portfolio.prototype.load = function(amount) {
 
   this.net = $(this.net + amount);
 
-  const unallocated = Object.assign(this.assets);
   const minPrice = this.assets.reduce((min, a) => Math.min(min, a.asset.price), Infinity);
   while(amount >= minPrice) {
     // Move asset with largest [negative] delta to the top.
