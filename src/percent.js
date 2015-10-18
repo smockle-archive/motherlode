@@ -7,6 +7,12 @@ function Percent(number) {
   percent.__value = number;
   return percent;
 }
+Percent.fromDecimal = function(number) {
+  // Validate parameters
+  if (typeof number !== 'number' && !(number instanceof Number))
+    throw new TypeError('Expected input to be a number.');
+  return Percent(100 * number);
+};
 Percent.prototype.inspect = function() {
   return `${this.__value}%`;
 }

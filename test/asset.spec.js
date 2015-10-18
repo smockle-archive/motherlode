@@ -1,28 +1,29 @@
 import 'mocha';
 import {assert} from 'chai';
 import Asset from '../src/asset';
+import USD from '../src/usd'; const $ = USD;
 
 describe('Asset', () => {
   describe('#constructor', () => {
     it('throws an error when symbol is not a string', () => {
-      assert.throws(Asset.bind(Asset, 1, 1), TypeError);
+      assert.throws(Asset.bind(Asset, 1, $(1)), TypeError);
     });
-    it('throws an error when price is not a number or Number', () => {
+    it('throws an error when symbol is too short', () => {
+      assert.throws(Asset.bind(Asset, '', $(1)), TypeError);
+    });
+    it('throws an error when price is not in USD', () => {
       assert.throws(Asset.bind(Asset, 'SPY', 'SPY'), TypeError);
     });
-    it('creates an asset when price is a number', () => {
-      const asset = Asset('SPY', 200);
-      assert.strictEqual(asset.symbol, 'SPY');
-      assert.typeOf(asset.symbol, 'string');
-      assert.strictEqual(asset.price, 200);
-      assert.typeOf(asset.price, 'number');
+    it('throws an error when price is negative or zero', () => {
+      assert.throws(Asset.bind(Asset, 'SPY', $(0)), TypeError);
+      assert.throws(Asset.bind(Asset, 'SPY', $(-1)), TypeError);
     });
-    it('creates an asset when price is a Number', () => {
-      const asset = Asset('SPY', new Number(200));
+    it('creates an asset when all inputs are valid', () => {
+      const asset = Asset('SPY', $(200));
       assert.strictEqual(asset.symbol, 'SPY');
       assert.typeOf(asset.symbol, 'string');
-      assert.deepEqual(asset.price, new Number(200));
-      assert.instanceOf(asset.price, Number);
+      assert.deepEqual(asset.price, $(200));
+      assert.instanceOf(asset.price, $);
     });
   });
 });

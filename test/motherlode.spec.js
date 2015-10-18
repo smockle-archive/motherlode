@@ -2,6 +2,7 @@ import 'mocha';
 import {assert} from 'chai';
 import Asset from '../src/asset';
 import Percent from '../src/percent';
+import USD from '../src/usd'; const $ = USD;
 import Motherlode from '../src/motherlode';
 
 describe('Motherlode', () => {
@@ -13,7 +14,7 @@ describe('Motherlode', () => {
   });
   it('throws if input Array contains an element without a required key', () => {
     const unallocated = [{
-      asset: Asset('SPY', 200),
+      asset: Asset('SPY', $(200)),
       quantity: 1,
       ideal: Percent(100)
     }];
@@ -26,7 +27,7 @@ describe('Motherlode', () => {
   });
   it('throws if input Array contains an element with a value of the wrong type', () => {
     const unallocated = [{
-      asset: Asset('SPY', 200),
+      asset: Asset('SPY', $(200)),
       quantity: 1,
       ideal: Percent(100)
     }];
@@ -37,9 +38,17 @@ describe('Motherlode', () => {
     assert.throws(Motherlode.bind(Motherlode, [notquantity]), TypeError);
     assert.throws(Motherlode.bind(Motherlode, [notideal]), TypeError);
   });
+  it('throws if input Array contains an element has a negative quantity', () => {
+    const negative = [{
+      asset: Asset('SPY', $(200)),
+      quantity: -1,
+      ideal: Percent(100)
+    }];
+    assert.throws(Motherlode.bind(Motherlode, [negative]), TypeError);
+  });
   it('returns array of assets', () => {
     const unallocated = [{
-      asset: Asset('SPY', 200),
+      asset: Asset('SPY', $(200)),
       quantity: 1,
       ideal: Percent(100)
     }];

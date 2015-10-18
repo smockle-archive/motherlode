@@ -21,6 +21,23 @@ describe('Percent', () => {
       assert.deepEqual(percent.__value, new Number(50));
     });
   });
+  describe('#fromDecimal', () => {
+    it('throws an error when input is not number or Number', () => {
+      assert.throws(Percent.fromDecimal.bind(Percent, '50'), TypeError);
+    });
+    it('creates a Percent when input is a number', () => {
+      assert.doesNotThrow(Percent.fromDecimal.bind(Percent, 0.5), TypeError);
+      const percent = Percent.fromDecimal(0.5);
+      assert.typeOf(percent.__value, 'number');
+      assert.strictEqual(percent.__value, 50);
+    });
+    it('creates a Percent when input is a Number', () => {
+      assert.doesNotThrow(Percent.fromDecimal.bind(Percent, new Number(0.5)), TypeError);
+      const percent = Percent.fromDecimal(new Number(0.5));
+      assert.typeOf(percent.__value, 'number');
+      assert.strictEqual(percent.__value, 50);
+    });
+  });
   describe('#inspect', () => {
     it('prints a positive percentage', () => {
       assert.strictEqual(util.inspect(Percent(50)), '50%');
