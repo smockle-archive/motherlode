@@ -62,8 +62,25 @@ describe('Motherlode', () => {
     });
   });
   describe('#load', () => {
-    it('exists', () => {
-      assert.isTrue(true);
+    it('throws if input is not in USD', () => {
+      const assets = [{
+        asset: Asset('SPY', $(200)),
+        quantity: 1,
+        ideal: Percent(100)
+      }];
+      let motherlode = Motherlode(assets);
+      assert.throws(motherlode.load.bind(motherlode, 'SPY'), TypeError);
+    });
+    it('loads additional funds', () => {
+      const assets = [{
+        asset: Asset('SPY', $(200)),
+        quantity: 1,
+        ideal: Percent(100)
+      }];
+      let motherlode = Motherlode(assets);
+      motherlode.load($(200));
+      assert.strictEqual(motherlode.assets[0].quantity, 2);
+      assert.deepEqual(motherlode.net, $(400));
     });
   });
 });
