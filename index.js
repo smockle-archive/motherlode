@@ -35,4 +35,17 @@ const assets = [{
 
 let portfolio = Portfolio(assets);
 portfolio.load($(30000));
+
+// Print new portfolio
 console.log(portfolio.assets);
+
+// Print actions
+portfolio.assets.forEach((allocated) => {
+  const unallocated = assets.find((a) => a.asset.symbol === allocated.asset.symbol) || { quantity: 0 };
+  const delta = allocated.quantity - unallocated.quantity;
+  if (delta === 0) return;
+  if (delta > 0)
+    console.log(`Buy ${delta} shares of ${allocated.asset.symbol}`);
+  if (delta < 0)
+    console.log(`Sell ${Math.abs(delta)} shares of ${allocated.asset.symbol}`);
+});
