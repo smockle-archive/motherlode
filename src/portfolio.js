@@ -72,10 +72,10 @@ Portfolio.prototype.load = function(amount) {
   const minPrice = this.assets.reduce((min, a) => Math.min(min, a.asset.price), Infinity);
   while(amount >= minPrice) {
     // Move asset with largest [negative] delta to the top.
-    // If multiple assets have the same delta, sort by price.
+    // If assets have very close deltas, sort assets with more significant deltas first.
     this.assets.sort((a, b) => {
-      return a.delta - b.delta === 0 ?
-      a.asset.price - b.asset.price :
+      return Math.abs(a.delta - b.delta) < 0.01 ?
+      (Math.abs(b.delta)/b.ideal) - (Math.abs(a.delta)/a.ideal) :
       a.delta - b.delta;
     });
     // Break if underallocated asset price is greater than remaining load amount.
