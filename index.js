@@ -38,14 +38,15 @@ let assets = [{
   ideal: Percent(5)
 }];
 
+// https://github.com/pilwon/node-yahoo-finance/blob/master/examples/promise/snapshot-multiple.js
 YahooFinance.snapshot({
-  fields: ['a'],
+  fields: ['l1'],
   symbols: assets.map(a => a.asset.symbol)
 })
 // Update prices
 .then(snapshot => {
   snapshot.forEach(s => {
-    assets.find(a => a.asset.symbol === s.symbol).asset.price = $(s.ask);
+    assets.find(a => a.asset.symbol === s.symbol).asset.price = $(s.lastTradePriceOnly);
   });
 })
 // Load portfolio
@@ -55,7 +56,7 @@ YahooFinance.snapshot({
   portfolio.load($(30000));
 
   // Print new portfolio
-  console.log(portfolio.assets);
+  // console.log(portfolio.assets);
 
   // Print actions
   assets.forEach((unallocated) => {
