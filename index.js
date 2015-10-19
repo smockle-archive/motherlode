@@ -2,8 +2,9 @@ import Portfolio from './src/portfolio';
 import Asset from './src/asset';
 import Percent from './src/percent';
 import USD from './src/usd'; const $ = USD;
+import Immutable from './src/immutable';
 
-const assets = [{
+const assets = Immutable([{
   asset: Asset('VTI', $(105)),
   quantity: 0,
   ideal: Percent(30)
@@ -31,7 +32,7 @@ const assets = [{
   asset: Asset('IAU', $(11.35)),
   quantity: 0,
   ideal: Percent(5)
-}];
+}]);
 
 let portfolio = Portfolio(assets);
 portfolio.load($(30000));
@@ -40,8 +41,8 @@ portfolio.load($(30000));
 console.log(portfolio.assets);
 
 // Print actions
-portfolio.assets.forEach((allocated) => {
-  const unallocated = assets.find((a) => a.asset.symbol === allocated.asset.symbol) || { quantity: 0 };
+assets.forEach((unallocated) => {
+  const allocated = portfolio.assets.find((a) => a.asset.symbol === unallocated.asset.symbol) || { quantity: 0 };
   const delta = allocated.quantity - unallocated.quantity;
   if (delta === 0) return;
   if (delta > 0)
@@ -49,3 +50,5 @@ portfolio.assets.forEach((allocated) => {
   if (delta < 0)
     console.log(`Sell ${Math.abs(delta)} shares of ${allocated.asset.symbol}`);
 });
+const _cash = portfolio.assets.find((a) => a.asset.symbol === '_CASH');
+if (_cash && _cash.quantity !== 0) console.log(`\$${_cash.quantity} in cash remaining`);

@@ -12,15 +12,16 @@ import USD from './usd'; const $ = USD;
 
 function Portfolio(assets) {
   let portfolio = Object.create(Portfolio.prototype);
+  portfolio.assets = Object.assign([], assets.map(asset => Object.assign({}, asset)));
 
-  if (!(assets instanceof Array))
+  if (!(portfolio.assets instanceof Array))
     throw new TypeError('Expected input to be an array.');
-  if (assets.length === 0)
+  if (portfolio.assets.length === 0)
     throw new Error('Input array cannot be empty.');
 
   // Calculate net and validate each element in input array.
   portfolio.net = $(0);
-  assets.forEach((u) => {
+  portfolio.assets.forEach((u) => {
     if (!u.hasOwnProperty('asset'))
       throw new TypeError('Input array contains an element without an asset key.');
     if (!u.hasOwnProperty('quantity'))
@@ -38,18 +39,17 @@ function Portfolio(assets) {
     portfolio.net += $(u.asset.price * u.quantity);
   });
 
-  if (assets.reduce((pct, a) => pct + a.ideal, 0) !== Percent(100).valueOf())
+  if (portfolio.assets.reduce((pct, a) => pct + a.ideal, 0) !== Percent(100).valueOf())
     throw new TypeError('Ideal allocations must sum to 100%.')
 
   // Set allocation and delta on each element in input array.
-  assets.forEach((u) => {
+  portfolio.assets.forEach((u) => {
     u.allocation = portfolio.net !== 0 ?
                    Percent.fromDecimal(u.asset.price * u.quantity / portfolio.net) :
                    Percent(0);
     u.delta = Percent.fromDecimal(u.allocation - u.ideal);
   });
 
-  portfolio.assets = Object.assign(assets);
   return portfolio;
 };
 
