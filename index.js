@@ -4,31 +4,35 @@ import Percent from './src/percent';
 import USD from './src/usd'; const $ = USD;
 
 const assets = [{
-  asset: Asset('ITOT', $(91.49)),
+  asset: Asset('VTI', $(105)),
   quantity: 0,
   ideal: Percent(30)
 }, {
-  asset: Asset('IJS', $(110.21)),
+  asset: Asset('VBR', $(102.47)),
   quantity: 0,
   ideal: Percent(10)
 }, {
-  asset: Asset('IXUS', $(51.35)),
-  quantity: 0,
-  ideal: Percent(20)
-}, {
-  asset: Asset('AGG', $(109.62)),
-  quantity: 0,
-  ideal: Percent(20)
-}, {
-  asset: Asset('TLT', $(123.42)),
+  asset: Asset('VEU', $(45.79)),
   quantity: 0,
   ideal: Percent(15)
 }, {
-  asset: Asset('IAU', $(11.28)),
+  asset: Asset('VSS', $(95.98)),
+  quantity: 0,
+  ideal: Percent(5)
+}, {
+  asset: Asset('BND', $(82.05)),
+  quantity: 0,
+  ideal: Percent(20)
+}, {
+  asset: Asset('TLT', $(123.71)),
+  quantity: 0,
+  ideal: Percent(15)
+}, {
+  asset: Asset('IAU', $(11.35)),
   quantity: 0,
   ideal: Percent(5)
 }];
 
 let portfolio = Portfolio(assets);
-portfolio.load($(3000));
+portfolio.load($(30000));
 console.log(portfolio.assets);
