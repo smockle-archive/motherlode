@@ -38,7 +38,7 @@ let portfolio = Portfolio(assets);
 portfolio.load($(30000));
 
 // Print new portfolio
-console.log(portfolio.assets);
+// console.log(portfolio.assets);
 
 // Print actions
 assets.forEach((unallocated) => {
