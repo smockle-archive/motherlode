@@ -3,7 +3,6 @@ import Percent from './percent';
 import USD from './usd'; const $ = USD;
 
 // Symbols, current prices, current number of shares, ideal allocation in memory
-  // TODO: Look up current prices
   // TODO: Ask for symbols, current number of shares, ideal allocation (or read from file)
 
 // Calculate current allocation
