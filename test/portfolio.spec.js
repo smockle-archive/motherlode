@@ -70,6 +70,20 @@ describe('Portfolio', () => {
       assert.strictEqual(assets[0].quantity, portfolio.assets[0].quantity);
       assert.deepEqual(assets[0].ideal, portfolio.assets[0].ideal);
     });
+    it('does not mutate input', () => {
+      const assets = [{
+        asset: Asset('ZVZZT', $(200)),
+        quantity: 1,
+        ideal: Percent(100)
+      }];
+      const konst = [{
+        asset: Asset('ZVZZT', $(200)),
+        quantity: 1,
+        ideal: Percent(100)
+      }];
+      Portfolio(assets);
+      assert.deepEqual(assets, konst);
+    });
   });
   describe('#load', () => {
     it('throws if input is not in USD', () => {
