@@ -91,6 +91,10 @@ Portfolio.prototype.load = function(amount) {
     });
   }
 
+  // TODO: Implement Portfolio#unload for selling
+
+  // TODO: Implement Portfolio#rebalance for buying + selling
+
   // Store uninvestable load amount as _CASH.
   if (amount > 0)
     this.assets.push({

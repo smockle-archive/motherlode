@@ -4,6 +4,10 @@ import Percent from './src/percent';
 import USD from './src/usd'; const $ = USD;
 import Immutable from './src/immutable';
 
+// TODO: Print unallocated and allocated portfolio when --verbose is set
+// TODO: Look up prices
+// TODO: Read load amount from STDIN/argv
+
 const assets = Immutable([{
   asset: Asset('VTI', $(105)),
   quantity: 0,
