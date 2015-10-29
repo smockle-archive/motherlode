@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node index.js",
-    "test": "mocha --compilers js:babel/register --recursive",
+    "test": "mocha --compilers js:babel/register --recursive && snyk test",
     "coverage": "$(npm bin)/istanbul cover $(npm bin)/_mocha -- --compilers js:babel/register --recursive",
     "shrinkwrap": "rm -Rf node_modules && rm -f npm-shrinkwrap.json && npm i && npm shrinkwrap --dev"
   },
@@ -23,10 +23,11 @@
     "babel": "^5.8.23",
     "babel-runtime": "^5.8.25",
     "chai": "^3.3.0",
-    "codeclimate-test-reporter": "^0.1.1",
+    "codeclimate-test-reporter": "github:smockle/javascript-test-reporter",
     "coveralls": "^2.11.4",
     "istanbul": "^0.4.0",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "snyk": "^0.6.0"
   },
   "dependencies": {
     "yahoo-finance": "^0.2.12"
