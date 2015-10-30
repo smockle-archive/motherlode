@@ -1,6 +1,4 @@
 {
-  "stage": 0,
-  "optional": [
-    "runtime"
-  ]
+  "presets": ["es2015"],
+  "plugins": ["transform-es2015-modules-commonjs","transform-es2015-block-scoping","transform-runtime"]
 }
