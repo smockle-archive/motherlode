@@ -17,4 +17,19 @@ function Asset(symbol, price) {
   asset.price = price;
   return asset;
 }
+Asset.prototype.serialize = function() {
+  return JSON.stringify({
+    symbol: this.symbol,
+    price: this.price.valueOf()
+  });
+};
+Asset.deserialize = function(json) {
+  if (!json.hasOwnProperty('symbol'))
+    throw new TypeError('Provided asset object must include a symbol key.');
+  if (!json.hasOwnProperty('price'))
+    throw new TypeError('Provided asset object must include a price key.');
+  if (typeof json.price !== 'number' && !(json.price instanceof Number))
+    throw new TypeError('Price must be a number.');
+  return Asset(json.symbol, $(json.price));
+};
 export default Asset;

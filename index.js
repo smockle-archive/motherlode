@@ -4,62 +4,39 @@ import Percent from './src/percent';
 import USD from './src/usd'; const $ = USD;
 import Immutable from './src/immutable';
 import YahooFinance from 'yahoo-finance';
+import fs from 'fs';
+
+const PATH = './data/tda_taxable.json';
+const AMOUNT = 500;
 
 // TODO: Print unallocated and allocated portfolio when --verbose is set
 // TODO: Read load amount from STDIN/argv
-
-let assets = [{
-  asset: Asset('VTI', $(105)),
-  quantity: 0,
-  ideal: Percent(30)
-}, {
-  asset: Asset('VBR', $(102.47)),
-  quantity: 0,
-  ideal: Percent(10)
-}, {
-  asset: Asset('VEU', $(45.79)),
-  quantity: 0,
-  ideal: Percent(15)
-}, {
-  asset: Asset('VSS', $(95.98)),
-  quantity: 0,
-  ideal: Percent(5)
-}, {
-  asset: Asset('BND', $(82.05)),
-  quantity: 0,
-  ideal: Percent(20)
-}, {
-  asset: Asset('TLT', $(123.71)),
-  quantity: 0,
-  ideal: Percent(15)
-}, {
-  asset: Asset('IAU', $(11.35)),
-  quantity: 0,
-  ideal: Percent(5)
-}];
+function readFile(path) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, 'utf8', (err, data) => {
+      if (err) return reject(err);
+      return resolve(data);
+    });
+  })
+}
 
 // https://github.com/pilwon/node-yahoo-finance/blob/master/examples/promise/snapshot-multiple.js
-YahooFinance.snapshot({
-  fields: ['l1'],
-  symbols: assets.map(a => a.asset.symbol)
-})
-// Update prices
-.then(snapshot => {
-  snapshot.forEach(s => {
-    assets.find(a => a.asset.symbol === s.symbol).asset.price = $(s.lastTradePriceOnly);
+function lookupPrices(assets) {
+  return YahooFinance.snapshot({
+    fields: ['l1'],
+    symbols: assets.map(a => a.asset.symbol)
+  })
+  // Update prices
+  .then(snapshot => {
+    snapshot.forEach(s => {
+      assets.find(a => a.asset.symbol === s.symbol).asset.price = $(s.lastTradePriceOnly);
+    });
+    return assets;
   });
-})
-// Load portfolio
-.then(() => {
-  assets = Immutable(assets);
-  let portfolio = Portfolio(assets);
-  portfolio.load($(30000));
+}
 
-  // Print new portfolio
-  // console.log(portfolio.assets);
-
-  // Print actions
-  assets.forEach((unallocated) => {
+function printTransactions(portfolio) {
+  portfolio.unallocated.forEach((unallocated) => {
     const allocated = portfolio.assets.find((a) => a.asset.symbol === unallocated.asset.symbol) || { quantity: 0 };
     const delta = allocated.quantity - unallocated.quantity;
     if (delta === 0) return;
@@ -70,6 +47,22 @@ YahooFinance.snapshot({
   });
   const _cash = portfolio.assets.find((a) => a.asset.symbol === '_CASH');
   if (_cash && _cash.quantity !== 0) console.log(`\$${_cash.quantity} in cash remaining`);
+}
+
+// Read portfolio from disk
+readFile('./data/tda_taxable.json')
+.then(JSON.parse)
+// Convert portfolio json to objects
+.then(Portfolio.deserialize)
+// Load latest price info
+.then(lookupPrices)
+// Add funds to the portfolio
+.then(assets => {
+  let portfolio = Portfolio(Immutable(assets));
+  portfolio.load($(AMOUNT));
+  return { unallocated: assets, allocated: portfolio.assets };
 })
+// List buy and sell actions
+.then(printTransactions)
 // Catch errors
 .catch(console.error.bind(console));

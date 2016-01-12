@@ -35,10 +35,12 @@ function Portfolio(assets) {
       throw new TypeError('Input array contains an element with a bad ideal value.');
     if (u.quantity < 0)
       throw new TypeError('Input array contains an element with a negative quantity.');
+    if (u.ideal > 100)
+      throw new TypeError('Input array contains an element with an impossibly high ideal.');
     portfolio.net += $(u.asset.price * u.quantity);
   });
 
-  if (portfolio.assets.reduce((pct, a) => pct + a.ideal, 0) !== Percent(100).valueOf())
+  if (Math.abs(portfolio.assets.reduce((pct, a) => pct + a.ideal, 0)-Percent(100).valueOf()) > 0.000000001)
     throw new TypeError('Ideal allocations must sum to 100%.')
 
   // Set allocation and delta on each element in input array.
@@ -102,5 +104,8 @@ Portfolio.prototype.load = function(amount) {
       ideal: Percent(0)
     });
 };
+
+Portfolio.prototype.serialize = () => this.holdings.map(holding => holding.toJSON());
+Portfolio.deserialize = json => Portfolio(json.map(j => Holding.fromJSON(j)));
 
 export default Portfolio;
