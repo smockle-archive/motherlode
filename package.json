@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node index.js",
-    "test": "mocha --compilers js:babel-core/register --recursive",
-    "coverage": "$(npm bin)/istanbul cover $(npm bin)/_mocha -- --compilers js:babel-core/register --recursive",
+    "test": "mocha --compilers js:babel-register --recursive",
+    "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --compilers js:babel-register --recursive",
     "shrinkwrap": "rm -Rf node_modules && rm -f npm-shrinkwrap.json && npm i && npm shrinkwrap --dev"
   },
   "repository": {
@@ -20,19 +20,20 @@
   },
   "homepage": "https://github.com/smockle/motherlode#readme",
   "devDependencies": {
-    "babel": "^6.0.14",
-    "babel-cli": "^6.0.14",
-    "babel-core": "^6.0.14",
-    "babel-plugin-transform-es2015-block-scoping": "^6.0.14",
-    "babel-plugin-transform-runtime": "^6.0.14",
-    "babel-preset-es2015": "^6.0.14",
-    "babel-runtime": "^6.0.14",
-    "chai": "^3.3.0",
-    "codeclimate-test-reporter": "github:smockle/javascript-test-reporter",
-    "coveralls": "^2.11.4",
-    "istanbul": "^0.4.0",
-    "mocha": "^2.3.3",
-    "snyk": "^1.1.0"
+    "babel": "^6.5.2",
+    "babel-cli": "^6.10.1",
+    "babel-core": "^6.9.1",
+    "babel-plugin-transform-es2015-block-scoping": "^6.10.1",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-runtime": "^6.9.2",
+    "chai": "^3.5.0",
+    "codeclimate-test-reporter": "^0.3.3",
+    "coveralls": "^2.11.9",
+    "istanbul": "^1.0.0-alpha.2",
+    "mocha": "^2.5.3",
+    "snyk": "^1.14.3",
+    "uglify-js": "^2.6.2"
   },
   "dependencies": {
     "yahoo-finance": "^0.2.12"
